@@ -1,0 +1,18 @@
+[
+  {
+    "titleKey": "onboarding_title1",
+    "descriptionKey": "onboarding_description1"
+  },
+  {
+    "titleKey": "onboarding_title2",
+    "descriptionKey": "onboarding_description2"
+  },
+  {
+    "titleKey": "onboarding_title3",
+    "descriptionKey": "onboarding_description3"
+  },
+  {
+    "titleKey": "onboarding_title4",
+    "descriptionKey": "onboarding_description4"
+  }
+]

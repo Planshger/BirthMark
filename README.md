@@ -1,16 +1,59 @@
-# birthmark
+# BirthMark
+Приложение для напоминания о днях рождения, чтобы вы никогда не забывали поздравить своих близких.
 
-A new Flutter project.
+## Архитектура
+Проект построен на основе принципов, схожих с **Clean Architecture**, и разделяет логику на три основных слоя для лучшей поддерживаемости и тестируемости кода.
 
-## Getting Started
+### 1. Domain Layer
+Это ядро приложения, содержащее всю бизнес-логику. Он не зависит от других слоев.
+- **Use Cases (Сценарии использования)**: Инкапсулируют конкретные бизнес-правила (например, `IsOnboardingCompleted`, `GetSubscriptionStatus`).
+- **Repositories (Репозитории)**: Абстрактные контракты (интерфейсы) для работы с данными.
+- **Entities (Сущности)**: Чистые объекты данных, представляющие основные бизнес-модели.
 
-This project is a starting point for a Flutter application.
+### 2. Data Layer
+Отвечает за предоставление данных для Domain слоя.
+- **Repository Implementations**: Конкретные реализации репозиториев из Domain слоя. Они решают, откуда брать данные — из локального хранилища или удаленного сервера.
+- **Data Sources**: Классы, напрямую взаимодействующие с источниками данных, такими как `SharedPreferences` или API.
 
-A few resources to get you started if this is your first Flutter project:
+### 3. Presentation Layer
+Отвечает за UI и взаимодействие с пользователем.
+- **Pages/Widgets**: Экраны и виджеты, созданные с помощью Flutter.
+- **State Management (BLoC)**: Состояние UI управляется с помощью пакета `flutter_bloc`. Каждый экран или сложный компонент имеет свой BLoC, который обрабатывает пользовательские события и управляет состоянием.
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+### Управление зависимостями
+Для связи между слоями и внедрения зависимостей используется связка пакетов `get_it` и `injectable`. Это обеспечивает слабую связанность компонентов и упрощает их тестирование.
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## Структура проекта
+
+Проект организован по функциональным модулям (фичам), что делает его легко масштабируемым.
+
+```
+lib
+├── core/                  # Общий код, используемый во всем приложении
+│   ├── di/                # Настройка Dependency Injection (GetIt, Injectable)
+│   └── ...
+│
+├── features/              # Основные фичи приложения
+│   │
+│   ├── onboarding/        # Фича онбординга
+│   │   ├── data/
+│   │   ├── domain/
+│   │   └── presentation/  # UI (Page, Widgets) и BLoC
+│   │
+│   ├── paywall/           # Фича экрана покупки
+│   │   └── ...
+│   │
+│   └── birthdate/         # Основная фича (список дней рождения)
+│       └── ...
+│
+└── main.dart              # Точка входа в приложение
+```
+- **`core`**: Содержит утилиты, константы, настройку DI и другие сквозные элементы.
+- **`features`**: Каждая папка внутри `features` — это отдельная функциональность приложения (например, онбординг, пейволл). Такой подход изолирует фичи друг от друга.
+- **`main.dart`**: Инициализирует приложение, настраивает зависимости и с помощью `FutureBuilder` определяет, какой экран показать пользователю (`OnboardingPage`, `PaywallPage` или `BirthDatePage`) в зависимости от его статуса
+
+#Что бы я улучшил?
+- добавил локализацию
+- сделал оптимизацию по разные экраны
+- уведомления о днях рождения
+

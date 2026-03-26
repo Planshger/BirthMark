@@ -9,30 +9,49 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  # core
-  flutter_bloc: ^9.1.1
-  # di
-  get_it: ^8.2.0
-  injectable: ^2.5.2
-  # data
-  hive_ce: ^2.15.0
-  hive_ce_flutter: ^2.3.2
-
-flutter_localizations:
+  flutter_localizations:
     sdk: flutter
 
-cupertino_icons: ^1.0.8
+  # State Management
+  flutter_bloc: ^9.1.1
+  provider: ^6.1.5+1
+
+  # Dependency Injection
+  get_it: ^8.2.0
+  injectable: ^2.5.2
+
+  # Data & Storage
+  hive_ce: ^2.15.0
+  hive_ce_flutter: ^2.3.2
+  postgres: ^3.5.9
+  shared_preferences: ^2.5.4
+
+  # UI
+  cupertino_icons: ^1.0.8
+  flutter_slidable: ^4.0.3
+
+  # Utils
+  uuid: ^4.5.2
+  flutter_dotenv: ^6.0.0
+  json_annotation: ^4.8.0
+  timezone: ^0.10.1
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  # codegen
-  hive_ce_generator: ^1.10.0
+
+  # Code Generation
   build_runner: ^2.9.0
-  analyzer: ^8.4.0
+  hive_ce_generator: ^1.10.0
   injectable_generator: ^2.9.0
-  # linter
+
+  # Linting & Analysis
   flutter_lints: ^5.0.0
+  analyzer: ^8.4.0
 
 flutter:
+  generate: true
   uses-material-design: true
+  assets:
+    - assets/data/onboarding_data.json
+
