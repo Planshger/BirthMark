@@ -1,10 +1,10 @@
 import 'package:birthmark/core/di/injector.dart';
+import 'package:birthmark/features/birthdate/presentation/pages/birthdate_page.dart';
 import 'package:birthmark/features/onboarding/presentation/bloc/onboardig_event.dart';
 import 'package:birthmark/features/onboarding/presentation/bloc/onboarding_bloc.dart';
 import 'package:birthmark/features/onboarding/presentation/bloc/onboarding_state.dart';
 import 'package:birthmark/features/onboarding/presentation/widgets/onboarding_controls.dart';
 import 'package:birthmark/features/onboarding/presentation/widgets/onboarding_slide.dart';
-import 'package:birthmark/features/paywall/presentation/pages/paywall_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -46,7 +46,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
           child: BlocListener<OnboardingBloc, OnboardingState>(
             listener: (context, state) {
               if (state is OnboardingCompleted) {
-                Navigator.of(context).pushReplacement(CupertinoPageRoute(builder: (_) => const PaywallPage()));
+                Navigator.of(context).pushReplacement(CupertinoPageRoute(builder: (_) => const BirthDatePage()));
               } else if (state is OnboardingLoaded) {
                 if (_controller.hasClients && _controller.page?.round() != state.currentIndex) {
                   _controller.animateToPage(

@@ -40,18 +40,6 @@ import 'package:birthmark/features/onboarding/domain/usecases/is_onboarding_comp
     as _i312;
 import 'package:birthmark/features/onboarding/domain/usecases/mark_onboarding_completed.dart'
     as _i998;
-import 'package:birthmark/features/paywall/data/datasources/paywall_local_data_source.dart'
-    as _i824;
-import 'package:birthmark/features/paywall/data/repositories/paywall_repository_impl.dart'
-    as _i230;
-import 'package:birthmark/features/paywall/domain/repositories/paywall_repository.dart'
-    as _i928;
-import 'package:birthmark/features/paywall/domain/usecases/get_subscription_status.dart'
-    as _i1044;
-import 'package:birthmark/features/paywall/domain/usecases/save_subscription_status.dart'
-    as _i399;
-import 'package:birthmark/features/paywall/presentation/bloc/paywall_bloc.dart'
-    as _i21;
 import 'package:get_it/get_it.dart' as _i174;
 import 'package:hive_ce_flutter/hive_flutter.dart' as _i919;
 import 'package:injectable/injectable.dart' as _i526;
@@ -77,9 +65,6 @@ extension GetItInjectableX on _i174.GetIt {
       () => sharedModule.provideSharedPreferences(),
       preResolve: true,
     );
-    gh.lazySingleton<_i824.PaywallLocalDataSource>(
-      () => _i824.PaywallLocalDataSourceImpl(gh<_i460.SharedPreferences>()),
-    );
     gh.lazySingleton<_i209.OnboardingLocalDataSource>(
       () => _i209.OnboardingLocalDataSourceImpl(gh<_i460.SharedPreferences>()),
     );
@@ -91,9 +76,6 @@ extension GetItInjectableX on _i174.GetIt {
     gh.lazySingleton<_i295.OnboardingRepository>(
       () =>
           _i170.OnboardingRepositoryImpl(gh<_i209.OnboardingLocalDataSource>()),
-    );
-    gh.lazySingleton<_i928.PaywallRepository>(
-      () => _i230.PaywallRepositoryImpl(gh<_i824.PaywallLocalDataSource>()),
     );
     gh.factory<_i378.AddBirthDate>(
       () => _i378.AddBirthDate(gh<_i404.BirthDateRepository>()),
@@ -117,15 +99,6 @@ extension GetItInjectableX on _i174.GetIt {
         getBirthDates: gh<_i638.GetBirthDates>(),
         updateBirthDate: gh<_i1044.UpdateBirthDate>(),
       ),
-    );
-    gh.lazySingleton<_i1044.GetSubscriptionStatus>(
-      () => _i1044.GetSubscriptionStatus(gh<_i928.PaywallRepository>()),
-    );
-    gh.lazySingleton<_i399.SaveSubscriptionStatus>(
-      () => _i399.SaveSubscriptionStatus(gh<_i928.PaywallRepository>()),
-    );
-    gh.factory<_i21.PaywallBloc>(
-      () => _i21.PaywallBloc(gh<_i399.SaveSubscriptionStatus>()),
     );
     gh.lazySingleton<_i393.GetOnboardingItems>(
       () => _i393.GetOnboardingItems(gh<_i295.OnboardingRepository>()),

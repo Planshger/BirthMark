@@ -24,12 +24,14 @@ class _BirthDatePageState extends State<BirthDatePage> {
     return BlocProvider(
       create: (_) => injector<BirthdateBloc>()..add(LoadBirthDatesEvent()),
       child: CupertinoPageScaffold(
+        backgroundColor: CupertinoColors.secondaryLabel,
         child: Stack(
           children: [
             CustomScrollView(
               slivers: [
                 const CupertinoSliverNavigationBar(
-                  largeTitle: Text('BirthMark'),
+                  backgroundColor: CupertinoColors.secondaryLabel,
+                  largeTitle: Text('BirthMark', style: TextStyle(color: CupertinoColors.opaqueSeparator), ),
                 ),
                 BlocBuilder<BirthdateBloc, BirthdateState>(
                   builder: (context, state) {

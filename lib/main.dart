@@ -2,64 +2,26 @@ import 'package:birthmark/core/di/injector.dart';
 import 'package:birthmark/features/birthdate/presentation/pages/birthdate_page.dart';
 import 'package:birthmark/features/onboarding/domain/usecases/is_onboarding_completed.dart';
 import 'package:birthmark/features/onboarding/presentation/pages/onboarding_page.dart';
-import 'package:birthmark/features/paywall/domain/usecases/get_subscription_status.dart';
-import 'package:birthmark/features/paywall/presentation/pages/paywall_page.dart';
 import 'package:flutter/cupertino.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
   await configureDependencies();
-  runApp(const MainApp());
+
+  final isOnboarded = await injector<IsOnboardingCompleted>()();
+
+  runApp(MainApp(isOnboarded: isOnboarded));
 }
 
-class MainApp extends StatefulWidget {
-  const MainApp({super.key});
-
-  @override
-  State<MainApp> createState() => _MainAppState();
-}
-
-typedef AppStatus = ({bool isOnboarded, bool isSubscribed});
-
-class _MainAppState extends State<MainApp> {
-  late final Future<AppStatus> _appStatusFuture;
-
-  @override
-  void initState() {
-    super.initState();
-    _appStatusFuture = _checkAppStatus();
-  }
-
-  Future<AppStatus> _checkAppStatus() async {
-    final results = await Future.wait([
-      injector<IsOnboardingCompleted>()(),
-      injector<GetSubscriptionStatus>()(),
-    ]);
-    return (isOnboarded: results[0], isSubscribed: results[1]);
-  }
+class MainApp extends StatelessWidget {
+  final bool isOnboarded;
+  const MainApp({super.key, required this.isOnboarded});
 
   @override
   Widget build(BuildContext context) {
     return CupertinoApp(
-      home: FutureBuilder<AppStatus>(
-        future: _appStatusFuture,
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const CupertinoPageScaffold(child: Center(child: CupertinoActivityIndicator()));
-          }
-
-          final status = snapshot.data;
-          if (status == null || !status.isOnboarded) {
-            return const OnboardingPage();
-          }
-
-          if (!status.isSubscribed) {
-            return const PaywallPage();
-          }
-
-          return const BirthDatePage();
-        },
-      ),
+      home: isOnboarded ? const BirthDatePage() : const OnboardingPage(),
     );
   }
 }
