@@ -1,33 +1,36 @@
-import 'package:birthmark/features/birthdate/data/models/birthdate_model.dart';
+import 'package:dio/dio.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:hive_ce_flutter/hive_flutter.dart';
 import 'package:injectable/injectable.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 @module
-abstract class SharedModule {
-  @preResolve
+abstract class InjectionModule {
   @lazySingleton
-  Future<bool> initHive() async {
-    try {
-      await Hive.initFlutter();
-      Hive.registerAdapter(BirthDateModelAdapter());
-      return true;
-    } catch (e) {
-      return false;
-    }
-  }
+  FlutterSecureStorage get secureStorage => const FlutterSecureStorage();
+
+  @lazySingleton
+  Dio get dio => Dio();
+
+  @Named('baseUrl')
+  String get baseUrl => 'http://10.190.168.164:3000/api'; 
+
+  @preResolve
+  @Named('prefs')
+  Future<SharedPreferences> get sharedPrefs async => await SharedPreferences.getInstance();
 
   @preResolve
   @lazySingleton
-  Future<Box<BirthDateModel>> provideBirthdatesBox() async {
-    return await Hive.openBox<BirthDateModel>('birthdates');
-  }
+  @Named('wishBox')
+  Future<Box> get wishBox async => await Hive.openBox('wishes');
 
   @preResolve
   @lazySingleton
-  Future<SharedPreferences> provideSharedPreferences() async {
-    return await SharedPreferences.getInstance();
-  }
+  @Named('categoryBox')
+  Future<Box> get categoryBox async => await Hive.openBox('categories');
 
+  @preResolve
+  @lazySingleton
+  @Named('occasionBox')
+  Future<Box> get occasionBox async => await Hive.openBox('occasions');
 }
-

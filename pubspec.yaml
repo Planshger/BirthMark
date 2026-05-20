@@ -25,6 +25,8 @@ dependencies:
   hive_ce_flutter: ^2.3.2
   postgres: ^3.5.9
   shared_preferences: ^2.5.4
+  flutter_secure_storage: ^9.2.4
+  dio: ^5.7.0
 
   # UI
   cupertino_icons: ^1.0.8
@@ -36,6 +38,7 @@ dependencies:
   flutter_dotenv: ^6.0.0
   json_annotation: ^4.8.0
   timezone: ^0.10.1
+  intl: any   
 
 dev_dependencies:
   flutter_test:
@@ -49,6 +52,7 @@ dev_dependencies:
   # Linting & Analysis
   flutter_lints: ^5.0.0
   analyzer: ^8.4.0
+  json_serializable: ^6.7.1
 
 flutter:
   generate: true
