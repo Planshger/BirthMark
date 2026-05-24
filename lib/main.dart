@@ -4,11 +4,9 @@ import 'package:birthmark/features/auth/presentation/bloc/auth_event.dart';
 import 'package:birthmark/features/auth/presentation/pages/auth_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:hive_ce_flutter/hive_flutter.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Hive.initFlutter();
   await configureDependencies();
   runApp(const MainApp());
 }

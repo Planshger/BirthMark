@@ -1,4 +1,5 @@
 import 'package:birthmark/features/auth/presentation/bloc/auth_event.dart';
+import 'package:birthmark/features/wishes/presentation/pages/wish_list_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../bloc/auth_bloc.dart';
@@ -15,6 +16,11 @@ class AuthPage extends StatelessWidget {
       backgroundColor: CupertinoColors.placeholderText,
       child: BlocConsumer<AuthBloc, AuthState>(
         listener: (context, state) {
+          if (state is Authenticated) {
+            Navigator.of(context).pushReplacement(
+              CupertinoPageRoute(builder: (_) => const WishListPage()),
+            );
+          }
           if (state is AuthError) {
             Future.delayed(const Duration(seconds: 2), () {
               if (context.mounted) {
@@ -22,55 +28,13 @@ class AuthPage extends StatelessWidget {
               }
             });
           }
-          if (state is Authenticated) {
-            Navigator.of(context).pushReplacement(
-              CupertinoPageRoute(
-                builder: (_) => const _WelcomeScreen(),
-              ),
-            );
-          }
         },
         builder: (context, state) {
           if (state is AuthLoading) {
             return const Center(child: CupertinoActivityIndicator());
           }
-          if (state is AuthError) {
-            return  AuthForm(errorMessage: state.message);
-          }
-          return const AuthForm();
+          return AuthForm(errorMessage: state is AuthError ? state.message : null);
         },
-      ),
-    );
-  }
-}
-
-class _WelcomeScreen extends StatelessWidget {
-  const _WelcomeScreen();
-
-  @override
-  Widget build(BuildContext context) {
-    return CupertinoPageScaffold(
-      child: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Text(
-              'Welcome!',
-              style: TextStyle(color: CupertinoColors.label, fontSize: 24),
-            ),
-            const SizedBox(height: 30),
-            CupertinoButton(
-              color: CupertinoColors.destructiveRed,
-              child: const Text('Выйти'),
-              onPressed: () {
-                context.read<AuthBloc>().add(LogoutEvent());
-                Navigator.of(context).pushReplacement(
-                  CupertinoPageRoute(builder: (_) => const AuthPage()),
-                );
-              },
-            ),
-          ],
-        ),
       ),
     );
   }

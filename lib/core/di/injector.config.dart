@@ -19,6 +19,23 @@ import 'package:birthmark/features/auth/domain/usecases/login.dart' as _i754;
 import 'package:birthmark/features/auth/domain/usecases/register.dart' as _i722;
 import 'package:birthmark/features/auth/presentation/bloc/auth_bloc.dart'
     as _i854;
+import 'package:birthmark/features/wishes/data/models/wish_model.dart' as _i824;
+import 'package:birthmark/features/wishes/data/repositories/wish_repository_impl.dart'
+    as _i80;
+import 'package:birthmark/features/wishes/domain/repositories/wish_repository.dart'
+    as _i797;
+import 'package:birthmark/features/wishes/domain/usecases/add_wish.dart'
+    as _i1011;
+import 'package:birthmark/features/wishes/domain/usecases/delete_wish.dart'
+    as _i627;
+import 'package:birthmark/features/wishes/domain/usecases/get_wishes.dart'
+    as _i270;
+import 'package:birthmark/features/wishes/domain/usecases/update_wish.dart'
+    as _i1027;
+import 'package:birthmark/features/wishes/domain/usecases/watch_wishes.dart'
+    as _i1007;
+import 'package:birthmark/features/wishes/presentation/bloc/wish_bloc.dart'
+    as _i923;
 import 'package:dio/dio.dart' as _i361;
 import 'package:flutter_secure_storage/flutter_secure_storage.dart' as _i558;
 import 'package:get_it/get_it.dart' as _i174;
@@ -38,6 +55,10 @@ extension GetItInjectableX on _i174.GetIt {
       () => injectionModule.secureStorage,
     );
     gh.lazySingleton<_i361.Dio>(() => injectionModule.dio);
+    await gh.lazySingletonAsync<bool>(
+      () => injectionModule.initHive(),
+      preResolve: true,
+    );
     await gh.lazySingletonAsync<_i919.Box<dynamic>>(
       () => injectionModule.occasionBox,
       instanceName: 'occasionBox',
@@ -53,7 +74,7 @@ extension GetItInjectableX on _i174.GetIt {
       instanceName: 'categoryBox',
       preResolve: true,
     );
-    await gh.lazySingletonAsync<_i919.Box<dynamic>>(
+    await gh.lazySingletonAsync<_i919.Box<_i824.WishModel>>(
       () => injectionModule.wishBox,
       instanceName: 'wishBox',
       preResolve: true,
@@ -72,6 +93,13 @@ extension GetItInjectableX on _i174.GetIt {
         gh<_i558.FlutterSecureStorage>(),
       ),
     );
+    gh.lazySingleton<_i797.WishRepository>(
+      () => _i80.WishRepositoryImpl(
+        gh<_i782.ApiClient>(),
+        gh<_i919.Box<_i824.WishModel>>(instanceName: 'wishBox'),
+      ),
+      dispose: (i) => i.dispose(),
+    );
     gh.factory<_i754.Login>(() => _i754.Login(gh<_i337.AuthRepository>()));
     gh.factory<_i722.Register>(
       () => _i722.Register(gh<_i337.AuthRepository>()),
@@ -81,6 +109,31 @@ extension GetItInjectableX on _i174.GetIt {
         gh<_i754.Login>(),
         gh<_i722.Register>(),
         gh<_i337.AuthRepository>(),
+      ),
+    );
+    gh.factory<_i1011.AddWish>(
+      () => _i1011.AddWish(gh<_i797.WishRepository>()),
+    );
+    gh.factory<_i627.DeleteWish>(
+      () => _i627.DeleteWish(gh<_i797.WishRepository>()),
+    );
+    gh.factory<_i270.GetWishes>(
+      () => _i270.GetWishes(gh<_i797.WishRepository>()),
+    );
+    gh.factory<_i1027.UpdateWish>(
+      () => _i1027.UpdateWish(gh<_i797.WishRepository>()),
+    );
+    gh.factory<_i1007.WatchWishes>(
+      () => _i1007.WatchWishes(gh<_i797.WishRepository>()),
+    );
+    gh.factory<_i923.WishBloc>(
+      () => _i923.WishBloc(
+        gh<_i797.WishRepository>(),
+        gh<_i1011.AddWish>(),
+        gh<_i1027.UpdateWish>(),
+        gh<_i627.DeleteWish>(),
+        gh<_i270.GetWishes>(),
+        gh<_i1007.WatchWishes>(),
       ),
     );
     return this;

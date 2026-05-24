@@ -56,7 +56,14 @@ class AuthRepositoryImpl implements AuthRepository {
   @override
   Future<bool> isLoggedIn() async {
     final token = await secureStorage.read(key: 'jwt_token');
-    return token != null;
+    if (token == null) return false;
+    try {
+      await apiClient.dio.get('/auth/me');
+      return true; 
+    } catch (e) {
+      await logout();
+      return false;
+    }
   }
 
   @override
